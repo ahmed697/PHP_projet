@@ -1,16 +1,18 @@
 <?php 
 session_start();
-include("lib/connexion.php");
-include("lib/select_produit.php");
-include("lib/select_categorie.php");
-include("lib/select_average.php");
-include("lib/select_by_categorie.php");
-include("lib/add_product_panier.php");
-// require_once "lib/email.php";
+include("../lib/connexion.php");
+include("../lib/select_panier.php");
+include("../lib/select_categorie.php");
+include("../lib/select_average.php");
+include("../lib/select_by_categorie.php");
+include("../lib/delete_from_panier.php");
 
- // print_r($_SESSION);
 
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +21,7 @@ include("lib/add_product_panier.php");
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>MyShop</title>
+        <title>Shop Item - Start Bootstrap Template</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -29,9 +31,7 @@ include("lib/add_product_panier.php");
     </head>
 
 
-
-    <body>
-        <!-- Navigation-->
+<!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="#!">MyShop</a>
@@ -68,47 +68,17 @@ include("lib/add_product_panier.php");
                                 <!-- <span class="badge bg-dark text-white ms-1 rounded-pill">0</span> -->
                             </a>
                         </form>
-                        <form class="d-flex">
-                            <a class="btn btn-outline-dark" href="panier_user">
-                                <i class="bi-cart-fill me-1"></i>
-                                Cart
-                                <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                            </a>
-                        </form> 
-                    <?php } ?>
 
+                    <?php } ?>
                 </div>
             </div>
         </nav>
-        <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">GAMESHOP</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Achetez vos jeux en toute simplicité</p>
-                </div>
-            </div>
-        </header>
-
-            <h1 class="d-flex justify-content-center mt-5 mb-5">Catégories</h1>   
-            <div class="container-fluid d-flex justify-content-center mt-3 p-2">
-                <a class="btn btn-primary" href="index.php">Tous</a> 
-            </div>        
-        <div class="container-fluid d-flex justify-content-center mt-1 p-2">
-
-            
-            <?php  foreach ($categorie_resultat as $key) { ?>
-                            <a class="btn btn-primary" href="index.php?cid=<?php echo $key['id_categorie']?>"><?php echo $key['name']?></a>
-
-            <?php } ?>
-        </div>
-
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-                    <?php  foreach ($categorie_produit_resultat as $key) {
+                    <h1>Votre Panier</h1>
+                    <?php  foreach ($resultat_panier as $key) {
                     if($key['display'] == 0){ ?>
                     <div class="col mb-5">
                         <div class="card h-100">
@@ -137,7 +107,7 @@ include("lib/add_product_panier.php");
 
 
                             <!-- Product image-->
-                            <img class="card-img-top" width="300" src="assets/images/<?php echo $key['image']; ?>" alt="..." />
+                            <img class="card-img-top" width="300" src="../assets/images/<?php echo $key['image']; ?>" alt="..." />
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">
@@ -181,15 +151,15 @@ include("lib/add_product_panier.php");
 
                                 </div>
                             </div>
-                                <!-- Product actions-->
-                            <form method="POST">
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="single_article/index.php?id_produit=<?php echo $key['id_produit']; ?>">Voir le produit</a></div>
-                                    <div class="text-center"><button class="btn btn-outline-dark mt-auto" type="submit">Ajouter au panier</button></div>
-                                    <input type="hidden" name="id_produit" value="<?php echo $key['id_produit'] ?>">
-                                </div>
-                            </form>
-                        </div>
+                            <!-- Product actions-->
+                        <form method="POST">
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="single_article/index.php?id_produit=<?php echo $key['id_produit']; ?>">Voir le produit</a></div>
+                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" type="submit">Supprimer du panier</button></div>
+                                <input type="hidden" name="id_produit" value="<?php echo $key['id_produit'] ?>">
+                            </div>
+                            </div>
+                        </form>
                     </div>
                     
                     <?php }else{ } } ?>
@@ -197,13 +167,3 @@ include("lib/add_product_panier.php");
                 </div>
             </div>
         </section>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-    </body>
-</html>
